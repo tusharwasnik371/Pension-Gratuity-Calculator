@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service & Pension Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+        .calculator {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .calculator input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        .result {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Service & Pension Calculator</h1>
+
+<div class="calculator">
+    <h2>Service Calculator</h2>
+    <label for="joinDate">Joining Date</label>
+    <input type="date" id="joinDate" value="1996-10-18">
+    <label for="retirementDate">Retirement Date</label>
+    <input type="date" id="retirementDate" value="2026-02-28">
+    <button onclick="calculateService()">Calculate Service</button>
+    <div class="result">
+        <p id="serviceResult"></p>
+    </div>
+</div>
+
+<div class="calculator">
+    <h2>Gratuity Calculator</h2>
+    <label for="basicSalary">Basic Salary</label>
+    <input type="number" id="basicSalary" value="33700">
+    <label for="serviceYears">Service Years</label>
+    <input type="number" id="serviceYears" value="29" readonly>
+    <button onclick="calculateGratuity()">Calculate Gratuity</button>
+    <div class="result">
+        <p id="gratuityResult"></p>
+    </div>
+</div>
+
+<div class="calculator">
+    <h2>Pension Sell to Govt. Calculator</h2>
+    <label for="basicPension">Basic Salary</label>
+    <input type="number" id="basicPension" value="33700">
+    <label for="daPension">DA of Basic Salary (50%)</label>
+    <input type="number" id="daPension" value="16850" readonly>
+    <label for="factor">Factor</label>
+    <input type="number" id="factor" value="8.371">
+    <label for="months">Months</label>
+    <input type="number" id="months" value="12">
+    <button onclick="calculatePension()">Calculate Pension</button>
+    <div class="result">
+        <p id="pensionResult"></p>
+        <p id="monthlyPensionResult"></p>
+    </div>
+</div>
+
+<script>
+    function calculateService() {
+        const joinDate = new Date(document.getElementById('joinDate').value);
+        const retirementDate = new Date(document.getElementById('retirementDate').value);
+
+        const years = retirementDate.getFullYear() - joinDate.getFullYear();
+        const months = retirementDate.getMonth() - joinDate.getMonth();
+        const days = retirementDate.getDate() - joinDate.getDate();
+
+        document.getElementById('serviceResult').innerHTML = `${years} Years, ${months} Months, ${days} Days`;
+    }
+
+    function calculateGratuity() {
+        const basicSalary = parseFloat(document.getElementById('basicSalary').value);
+        const serviceYears = parseInt(document.getElementById('serviceYears').value);
+        
+        const gratuity = (basicSalary * serviceYears * 15) / 26;
+
+        document.getElementById('gratuityResult').innerHTML = `Final Gratuity: ₹${gratuity.toFixed(2)}`;
+    }
+
+    function calculatePension() {
+        const basicSalary = parseFloat(document.getElementById('basicPension').value);
+        const da = parseFloat(document.getElementById('daPension').value);
+        const factor = parseFloat(document.getElementById('factor').value);
+        const months = parseInt(document.getElementById('months').value);
+
+        const pension = basicSalary + da;
+        const pension40Percent = pension * 0.4;
+        const amountReceived = pension40Percent * factor * months;
+        const monthlyPension = pension - pension40Percent;
+
+        document.getElementById('pensionResult').innerHTML = `Amount Received After Selling Pension: ₹${amountReceived.toFixed(2)}`;
+        document.getElementById('monthlyPensionResult').innerHTML = `Pension Per Month After Selling: ₹${monthlyPension.toFixed(2)}`;
+    }
+</script>
+
+</body>
+</html>
